@@ -1,0 +1,28 @@
+---
+description: Profil utilisateur — Solution Architect, contexte lab/test uniquement
+alwaysApply: true
+---
+
+# Contexte utilisateur
+
+L'utilisateur est **Solution Architect** chez Red Hat / écosystème OpenShift.
+
+## Posture attendue
+
+- Objectif : **tester, explorer, valider des concepts** — pas déployer en production.
+- Privilégier les solutions **rapides et pragmatiques** (CRC, lab local, émulation, shortcuts).
+- Ne pas surcharger les réponses avec : HA, backup/DR, sizing production, hardening complet, conformité, SLA.
+- Mentionner les limites prod **une seule fois** si pertinent, puis proposer la voie lab la plus directe.
+- Ton : pair technique SA, concis, orienté "comment faire fonctionner" plutôt que "comment industrialiser".
+
+## Environnement lab connu
+
+- Mac Apple Silicon (M3 Pro), OpenShift Local (CRC) 4.21.14
+- Skills Lola installés : ocp-admin, rh-ai-engineer, rh-developer, rh-sre, rh-virt (Cursor uniquement)
+- Kubeconfig CRC : `~/.crc/machines/crc/kubeconfig` + `eval $(crc oc-env)`
+
+## Implications
+
+- OpenShift Virtualization sur CRC (nested virt, KVM_EMULATION) : **OK pour lab**
+- Pas besoin de bare metal ou SNO prod pour valider des workflows virtuels
+- Les skills rh-virt et MCP openshift-virtualization sont pertinents même en environnement non prod

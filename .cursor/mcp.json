@@ -1,0 +1,247 @@
+{
+  "mcpServers": {
+    "openshift-self-managed": {
+      "command": "podman",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--network=host",
+        "-e",
+        "OFFLINE_TOKEN=${OFFLINE_TOKEN}",
+        "-e",
+        "TRANSPORT=stdio",
+        "-e",
+        "INVENTORY_URL=https://api.openshift.com/api/assisted-install/v2",
+        "-e",
+        "PULL_SECRET_URL=https://api.openshift.com/api/accounts_mgmt/v1/access_token",
+        "-e",
+        "SSO_URL=https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token",
+        "quay.io/ecosystem-appeng/assisted-service-mcp@sha256:e3e84602c6ef2882dc0737e7ad0fafd16d39887dce9f4fb399c470b11158f486"
+      ],
+      "env": {
+        "OFFLINE_TOKEN": "${OFFLINE_TOKEN}"
+      },
+      "description": "Red Hat Assisted Installer MCP server for self-managed clusters (OCP, SNO). Uses Assisted Installer API for cluster creation and management.",
+      "security": {
+        "isolation": "container",
+        "network": "local",
+        "credentials": "env-only"
+      }
+    },
+    "openshift-ocm-managed": {
+      "command": "podman",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--network=host",
+        "-e",
+        "OFFLINE_TOKEN=${OFFLINE_TOKEN}",
+        "-e",
+        "TRANSPORT=stdio",
+        "-e",
+        "INVENTORY_URL=https://api.openshift.com/api/clusters_mgmt/v1",
+        "-e",
+        "PULL_SECRET_URL=https://api.openshift.com/api/accounts_mgmt/v1/access_token",
+        "-e",
+        "SSO_URL=https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token",
+        "quay.io/ecosystem-appeng/assisted-service-mcp@sha256:e3e84602c6ef2882dc0737e7ad0fafd16d39887dce9f4fb399c470b11158f486"
+      ],
+      "env": {
+        "OFFLINE_TOKEN": "${OFFLINE_TOKEN}"
+      },
+      "description": "Red Hat OCM MCP server for managed service clusters (ROSA, ARO, OSD). Uses OCM API for cluster listing and management.",
+      "security": {
+        "isolation": "container",
+        "network": "local",
+        "credentials": "env-only"
+      }
+    },
+    "openshift-administration": {
+      "command": "podman",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--network=host",
+        "--userns=keep-id:uid=65532,gid=65532",
+        "-v",
+        "${KUBECONFIG}:/kubeconfig:ro,Z",
+        "--entrypoint",
+        "/app/kubernetes-mcp-server",
+        "quay.io/ecosystem-appeng/openshift-mcp-server@sha256:3531cb78f51f8c7ebcdb21adc21358ab8924116994848a3ce1ff542b3fc23742",
+        "--kubeconfig",
+        "/kubeconfig",
+        "--toolsets",
+        "core,config"
+      ],
+      "env": {
+        "KUBECONFIG": "${KUBECONFIG}"
+      },
+      "description": "Red Hat Openshift MCP server for interacting with Openshift Container Platform clusters and its operators",
+      "security": {
+        "isolation": "container",
+        "network": "local",
+        "credentials": "env-only"
+      }
+    },
+    "openshift": {
+      "command": "podman",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--network=host",
+        "--userns=keep-id:uid=65532,gid=65532",
+        "-v",
+        "${KUBECONFIG}:/kubeconfig:ro,Z",
+        "--entrypoint",
+        "/app/kubernetes-mcp-server",
+        "quay.io/ecosystem-appeng/openshift-mcp-server@sha256:3531cb78f51f8c7ebcdb21adc21358ab8924116994848a3ce1ff542b3fc23742",
+        "--kubeconfig",
+        "/kubeconfig",
+        "--toolsets",
+        "core,config,helm,kubevirt,observability,ossm"
+      ],
+      "env": {
+        "KUBECONFIG": "${KUBECONFIG}"
+      },
+      "description": "Red Hat Openshift MCP server for interacting with Openshift Container Platform clusters and its operators",
+      "security": {
+        "isolation": "container",
+        "network": "local",
+        "credentials": "env-only"
+      }
+    },
+    "ai-observability": {
+      "type": "http",
+      "url": "${AI_OBSERVABILITY_MCP_URL}/mcp",
+      "description": "AI Observability MCP server for vLLM model performance analysis, GPU monitoring, OpenShift metrics, and distributed tracing. Deployed on-cluster from quay.io/ecosystem-appeng/aiobs-mcp-server. See: https://github.com/rh-ai-quickstart/ai-observability-summarizer",
+      "security": {
+        "isolation": "remote",
+        "network": "cluster",
+        "credentials": "env-only"
+      }
+    },
+    "rhoai": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/opendatahub-io/rhoai-mcp@31576c61b6f59280704c86dde1e3e9ed79def5e5",
+        "rhoai-mcp"
+      ],
+      "env": {
+        "RHOAI_MCP_KUBECONFIG_PATH": "${KUBECONFIG}",
+        "RHOAI_MCP_TRANSPORT": "stdio"
+      },
+      "description": "Red Hat OpenShift AI MCP server for high-level RHOAI operations: Data Science Projects, model serving (InferenceService deploy/list/get), serving runtimes, data connections, workbenches, pipelines, storage, training, and model registry. See: https://github.com/opendatahub-io/rhoai-mcp",
+      "security": {
+        "isolation": "process",
+        "network": "local",
+        "credentials": "env-only"
+      }
+    },
+    "podman": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "podman-mcp-server@0.0.15"
+      ],
+      "env": {},
+      "description": "Podman MCP server for container image management and local builds",
+      "security": {
+        "isolation": "process",
+        "network": "local",
+        "credentials": "none"
+      }
+    },
+    "github": {
+      "command": "podman",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "ghcr.io/github/github-mcp-server:1.0.3"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      },
+      "description": "GitHub MCP server for repository browsing and code analysis",
+      "security": {
+        "isolation": "container",
+        "network": "local",
+        "credentials": "env-only"
+      }
+    },
+    "lightspeed-mcp": {
+      "command": "podman",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--env",
+        "LIGHTSPEED_CLIENT_ID",
+        "--env",
+        "LIGHTSPEED_CLIENT_SECRET",
+        "quay.io/redhat-services-prod/insights-management-tenant/insights-mcp/red-hat-lightspeed-mcp@sha256:98ee33fa7cb690d02d33f57900ab95ad831b8e7985710e0ccb87f53ce1b09865"
+      ],
+      "env": {
+        "LIGHTSPEED_CLIENT_ID": "${LIGHTSPEED_CLIENT_ID}",
+        "LIGHTSPEED_CLIENT_SECRET": "${LIGHTSPEED_CLIENT_SECRET}"
+      },
+      "description": "Red Hat Lightspeed MCP server for CVE data and remediation playbook generation (accessible only through remediation agent and skills)",
+      "security": {
+        "isolation": "container",
+        "network": "local",
+        "credentials": "env-only"
+      }
+    },
+    "aap-mcp-job-management": {
+      "type": "http",
+      "url": "https://${AAP_MCP_SERVER}/job_management/mcp",
+      "headers": {
+        "Authorization": "Bearer ${AAP_API_TOKEN}"
+      },
+      "description": "Ansible Automation Platform (AAP) job management MCP server for managing job templates, job executions, and workflows"
+    },
+    "aap-mcp-inventory-management": {
+      "type": "http",
+      "url": "https://${AAP_MCP_SERVER}/inventory_management/mcp",
+      "headers": {
+        "Authorization": "Bearer ${AAP_API_TOKEN}"
+      },
+      "description": "Ansible Automation Platform (AAP) inventory management MCP server for managing inventories, hosts, and groups"
+    },
+    "openshift-virtualization": {
+      "command": "podman",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--network=host",
+        "--userns=keep-id:uid=65532,gid=65532",
+        "-v",
+        "${KUBECONFIG}:/kubeconfig:ro,Z",
+        "--entrypoint",
+        "/app/kubernetes-mcp-server",
+        "quay.io/ecosystem-appeng/openshift-mcp-server@sha256:3531cb78f51f8c7ebcdb21adc21358ab8924116994848a3ce1ff542b3fc23742",
+        "--kubeconfig",
+        "/kubeconfig",
+        "--toolsets",
+        "core,kubevirt"
+      ],
+      "env": {
+        "KUBECONFIG": "${KUBECONFIG}"
+      },
+      "description": "Red Hat Openshift MCP server for interacting with Openshift Container Platform clusters and its operators",
+      "security": {
+        "isolation": "container",
+        "network": "local",
+        "credentials": "env-only"
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+credential.txt
+.lola/
+*.secret.yaml
+**/secrets/
+.env
+.DS_Store
