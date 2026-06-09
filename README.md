@@ -32,6 +32,12 @@ gitops/
         │   ├── namespace.yaml
         │   └── workloads/        # vm/ et containers/ (vide)
         └── overlays/prod/
+│
+└── argocd/
+    └── applications/               # Applications Argo CD
+        ├── cnv-dev.yaml
+        ├── jko-dev.yaml
+        └── kustomization.yaml
 ```
 
 | Couche | Rôle |
@@ -88,7 +94,18 @@ L'opérateur est installé via `cluster/operators/openshift-gitops/`. L'instance
 oc get route openshift-gitops-server -n openshift-gitops
 ```
 
-Dossiers `bootstrap/` et `argocd/` réservés pour les Applications Argo CD (non configurées).
+Repo Git : [JulienKolaric/OpenshiftSNO](https://github.com/JulienKolaric/OpenshiftSNO.git)
+
+Après le premier `git push`, enregistrer les Applications :
+
+```bash
+oc apply -k gitops/argocd/applications
+```
+
+| Application | Chemin Git | Rôle |
+|-------------|------------|------|
+| `cnv-dev` | `cluster/operators/cnv/overlays/dev` | Opérateur Virtualization (sync manuelle) |
+| `jko-dev` | `namespaces/jko-dev/overlays/dev` | Namespace + VMs (sync auto) |
 
 ## Hors GitOps
 

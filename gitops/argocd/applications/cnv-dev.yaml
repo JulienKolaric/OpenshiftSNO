@@ -18,7 +18,23 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: openshift-cnv
+  ignoreDifferences:
+    - group: operators.coreos.com
+      kind: Subscription
+      jsonPointers:
+        - /status
+    - group: operators.coreos.com
+      kind: InstallPlan
+      jsonPointers:
+        - /status
+    - group: hco.kubevirt.io
+      kind: HyperConverged
+      jsonPointers:
+        - /status
   syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true

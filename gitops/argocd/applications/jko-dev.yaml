@@ -18,6 +18,26 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: jko-dev
+  ignoreDifferences:
+    - group: kubevirt.io
+      kind: VirtualMachine
+      jsonPointers:
+        - /status
+        - /metadata/finalizers
+        - /metadata/annotations
+    - group: kubevirt.io
+      kind: VirtualMachine
+      managedFieldsManagers:
+        - virt-controller
+        - virt-api
+    - group: kubevirt.io
+      kind: VirtualMachine
+      jqPathExpressions:
+        - .spec.template.metadata.annotations
+        - .spec.template.spec.architecture
+        - .spec.template.spec.domain.firmware
+        - .spec.template.spec.domain.machine
+        - .spec.template.spec.domain.devices.interfaces[].macAddress
   syncPolicy:
     automated:
       prune: false
