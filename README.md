@@ -8,7 +8,10 @@ Monorepo GitOps pour OpenShift Virtualization et workloads Kubernetes.
 gitops/
 ├── cluster/                        # Infra partagée (cluster-scoped)
 │   └── operators/
-│       └── cnv/                    # OpenShift Virtualization
+│       ├── cnv/                    # OpenShift Virtualization
+│       │   ├── base/
+│       │   └── overlays/dev/
+│       └── openshift-gitops/       # OpenShift GitOps (Argo CD)
 │           ├── base/
 │           └── overlays/dev/
 │
@@ -53,6 +56,7 @@ gitops/
 eval $(crc oc-env)
 
 oc apply -k gitops/cluster/operators/cnv/overlays/dev
+oc apply -k gitops/cluster/operators/openshift-gitops/overlays/dev
 oc apply -k gitops/namespaces/jko-dev/overlays/dev
 oc apply -k gitops/namespaces/jko-prod/overlays/prod
 ```
@@ -78,7 +82,13 @@ resources:
 
 ## OpenShift GitOps
 
-Dossiers `bootstrap/` et `argocd/` réservés pour une activation future d'Argo CD.
+L'opérateur est installé via `cluster/operators/openshift-gitops/`. L'instance Argo CD par défaut est dans le namespace `openshift-gitops`.
+
+```bash
+oc get route openshift-gitops-server -n openshift-gitops
+```
+
+Dossiers `bootstrap/` et `argocd/` réservés pour les Applications Argo CD (non configurées).
 
 ## Hors GitOps
 

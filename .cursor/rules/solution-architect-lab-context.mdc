@@ -5,7 +5,11 @@ alwaysApply: true
 
 # Contexte utilisateur
 
-L'utilisateur est **Solution Architect** chez Red Hat / écosystème OpenShift.
+**Julien KOLARIC** — Solution Architect chez Red Hat / écosystème OpenShift.
+
+- Email : `jkolaric@redhat.com`
+- Identité Git : `Julien KOLARIC <jkolaric@redhat.com>`
+- Préfixe namespaces lab : `jko` (`jko-dev`, `jko-prod`)
 
 ## Posture attendue
 
@@ -23,6 +27,6 @@ L'utilisateur est **Solution Architect** chez Red Hat / écosystème OpenShift.
 
 ## Implications
 
-- OpenShift Virtualization sur CRC (nested virt, KVM_EMULATION) : **OK pour lab**
+- OpenShift Virtualization sur CRC (nested virt via vfkit `--nested`) : **OK pour lab**
 - Pas besoin de bare metal ou SNO prod pour valider des workflows virtuels
 - Les skills rh-virt et MCP openshift-virtualization sont pertinents même en environnement non prod
