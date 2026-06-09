@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cnv-dev
+  namespace: openshift-gitops
+  labels:
+    app.kubernetes.io/part-of: jko
+    app.kubernetes.io/component: argocd
+    environment: dev
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/JulienKolaric/OpenshiftSNO.git
+    targetRevision: main
+    path: gitops/cluster/operators/cnv/overlays/dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openshift-cnv
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
