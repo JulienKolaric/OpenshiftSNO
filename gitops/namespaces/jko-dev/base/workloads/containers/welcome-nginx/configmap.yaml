@@ -116,7 +116,7 @@ data:
           <path fill="#ee0000" d="M88 12h14l28 48h-14l-5-9h-28l-5 9H64L88 12zm14 28-9-16-9 16h18z"/>
           <text x="140" y="44" fill="#ffffff" font-family="Arial, sans-serif" font-size="36" font-weight="700">Red Hat</text>
         </svg>
-        <h1>Welcome To <span>Red Hat</span> Universe</h1>
+        <h1>Welcome To The <span>Red Hat</span> Universe</h1>
         <p class="subtitle">
           Open hybrid cloud platform — from the operating system to Kubernetes,
           automation and virtualization. Powered by UBI on OpenShift.
