@@ -1,0 +1,66 @@
+# Patch the ArgoCD instance managed by GitopsService (apply separately from operator install).
+# oc apply -f gitops/cluster/operators/openshift-gitops/overlays/dev/argocd-resource-health-checks.yaml
+apiVersion: argoproj.io/v1beta1
+kind: ArgoCD
+metadata:
+  name: openshift-gitops
+  namespace: openshift-gitops
+spec:
+  resourceHealthChecks:
+    - kind: Pod
+      check: |
+        hs = {}
+        hs.status = "Progressing"
+        hs.message = ""
+
+        if obj.metadata ~= nil and obj.metadata.labels ~= nil
+           and obj.metadata.labels["kubevirt.io"] == "virt-launcher" then
+          if obj.status ~= nil and obj.status.phase == "Running" then
+            for _, container in ipairs(obj.status.containerStatuses or {}) do
+              if container.ready == false then
+                hs.message = "virt-launcher container not ready"
+                return hs
+              end
+            end
+            hs.status = "Healthy"
+            hs.message = "virt-launcher running"
+            return hs
+          end
+          if obj.status ~= nil and obj.status.phase == "Failed" then
+            hs.status = "Degraded"
+            return hs
+          end
+          return hs
+        end
+
+        if obj.status == nil then
+          return hs
+        end
+
+        if obj.status.phase == "Pending" then
+          return hs
+        elseif obj.status.phase == "Succeeded" then
+          hs.status = "Healthy"
+          return hs
+        elseif obj.status.phase == "Failed" then
+          hs.status = "Degraded"
+          return hs
+        elseif obj.status.phase == "Running" then
+          if obj.spec.restartPolicy == "Always" then
+            for _, container in ipairs(obj.status.containerStatuses or {}) do
+              if container.ready == false then
+                return hs
+              end
+              if container.lastState ~= nil and container.lastState.terminated ~= nil then
+                hs.status = "Degraded"
+                return hs
+              end
+            end
+            hs.status = "Healthy"
+            return hs
+          end
+          return hs
+        end
+
+        hs.status = "Unknown"
+        return hs
