@@ -34,10 +34,13 @@ spec:
       kind: VirtualMachine
       jqPathExpressions:
         - .spec.template.metadata.annotations
+        - .spec.template.metadata.creationTimestamp
         - .spec.template.spec.architecture
         - .spec.template.spec.domain.firmware
         - .spec.template.spec.domain.machine
+        - .spec.template.spec.domain.resources
         - .spec.template.spec.domain.devices.interfaces[].macAddress
+        - .spec.dataVolumeTemplates[].metadata.creationTimestamp
   syncPolicy:
     automated:
       prune: false
