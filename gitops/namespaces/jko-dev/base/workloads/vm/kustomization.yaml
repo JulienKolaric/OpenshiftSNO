@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - test-fedora.yaml
+  - test-rhel9.yaml
 
 labels:
   - includeSelectors: false
