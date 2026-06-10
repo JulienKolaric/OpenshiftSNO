@@ -1,0 +1,164 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: welcome-nginx-content
+  labels:
+    app.kubernetes.io/name: welcome-nginx
+    app.kubernetes.io/component: web
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Welcome To Red Hat Universe</title>
+      <style>
+        :root {
+          --rh-red: #ee0000;
+          --rh-dark: #151515;
+          --rh-gray: #4d4d4d;
+          --rh-light: #f5f5f5;
+          --rh-white: #ffffff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+          font-family: "Red Hat Text", "Overpass", "Helvetica Neue", Arial, sans-serif;
+          background: linear-gradient(160deg, var(--rh-dark) 0%, #2b2b2b 45%, #1a1a1a 100%);
+          color: var(--rh-white);
+          min-height: 100vh;
+        }
+        .hero {
+          text-align: center;
+          padding: 3rem 1.5rem 2rem;
+        }
+        .logo {
+          width: min(220px, 60vw);
+          margin-bottom: 1.5rem;
+        }
+        h1 {
+          font-size: clamp(1.8rem, 4vw, 3rem);
+          font-weight: 700;
+          letter-spacing: -0.02em;
+          margin-bottom: 0.75rem;
+        }
+        h1 span { color: var(--rh-red); }
+        .subtitle {
+          color: #cccccc;
+          font-size: 1.1rem;
+          max-width: 42rem;
+          margin: 0 auto 2.5rem;
+          line-height: 1.6;
+        }
+        .infographic {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 1.25rem;
+          max-width: 1100px;
+          margin: 0 auto;
+          padding: 0 1.5rem 3rem;
+        }
+        .card {
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          border-radius: 12px;
+          padding: 1.5rem;
+          transition: transform 0.2s, border-color 0.2s;
+        }
+        .card:hover {
+          transform: translateY(-4px);
+          border-color: var(--rh-red);
+        }
+        .card-icon {
+          width: 48px;
+          height: 48px;
+          border-radius: 10px;
+          background: var(--rh-red);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 700;
+          font-size: 0.75rem;
+          margin-bottom: 1rem;
+        }
+        .card h2 {
+          font-size: 1.1rem;
+          margin-bottom: 0.5rem;
+        }
+        .card p {
+          color: #b3b3b3;
+          font-size: 0.9rem;
+          line-height: 1.5;
+        }
+        .footer {
+          text-align: center;
+          padding: 1.5rem;
+          color: #888;
+          font-size: 0.85rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .badge {
+          display: inline-block;
+          margin-top: 1rem;
+          padding: 0.35rem 0.75rem;
+          border-radius: 999px;
+          background: rgba(238, 0, 0, 0.15);
+          color: #ff6666;
+          font-size: 0.8rem;
+          font-weight: 600;
+        }
+      </style>
+    </head>
+    <body>
+      <section class="hero">
+        <svg class="logo" viewBox="0 0 320 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Red Hat">
+          <path fill="#ee0000" d="M52 8c-18 0-32 14-32 32s14 32 32 32c8 0 15-3 20-8l-8-8c-3 3-7 5-12 5-10 0-18-8-18-18s8-18 18-18c5 0 9 2 12 5l8-8c-5-5-12-8-20-8z"/>
+          <path fill="#ee0000" d="M88 12h14l28 48h-14l-5-9h-28l-5 9H64L88 12zm14 28-9-16-9 16h18z"/>
+          <text x="140" y="44" fill="#ffffff" font-family="Arial, sans-serif" font-size="36" font-weight="700">Red Hat</text>
+        </svg>
+        <h1>Welcome To <span>Red Hat</span> Universe</h1>
+        <p class="subtitle">
+          Open hybrid cloud platform — from the operating system to Kubernetes,
+          automation and virtualization. Powered by UBI on OpenShift.
+        </p>
+        <span class="badge">namespace: jko-dev · image: ubi9/nginx-124</span>
+      </section>
+
+      <section class="infographic" aria-label="Red Hat platform infographic">
+        <article class="card">
+          <div class="card-icon">OCP</div>
+          <h2>OpenShift</h2>
+          <p>Enterprise Kubernetes platform for building, deploying and scaling cloud-native applications.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon">RHEL</div>
+          <h2>Red Hat Enterprise Linux</h2>
+          <p>The stable foundation for physical, virtual and cloud workloads across architectures.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon">AAP</div>
+          <h2>Ansible Automation</h2>
+          <p>Automate infrastructure, networks, security and application lifecycle at scale.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon">CNV</div>
+          <h2>OpenShift Virtualization</h2>
+          <p>Run VMs alongside containers on OpenShift with KubeVirt and unified management.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon">Git</div>
+          <h2>OpenShift GitOps</h2>
+          <p>Declarative continuous delivery with Argo CD — Git as the single source of truth.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon">UBI</div>
+          <h2>Universal Base Image</h2>
+          <p>Red Hat curated container images for secure, portable and supportable workloads.</p>
+        </article>
+      </section>
+
+      <footer class="footer">
+        Lab GitOps · Julien KOLARIC · OpenShift Virtualization on CRC
+      </footer>
+    </body>
+    </html>
