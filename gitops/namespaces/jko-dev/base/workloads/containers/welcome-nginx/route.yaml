@@ -6,6 +6,7 @@ metadata:
     app.kubernetes.io/name: welcome-nginx
     app.kubernetes.io/component: web
 spec:
+  host: welcome-nginx-jko-dev.apps-crc.testing
   to:
     kind: Service
     name: welcome-nginx
